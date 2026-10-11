@@ -72,7 +72,9 @@ class W5700Emulator(BenQConnection):
             "modelname": "W5700",
             "macaddr": "00:00:00:00:00:00",
         }
-        self._reader.feed_data(f">{command}\r\r\n*{key.upper()}={state[key].upper()}#\r\n".encode())
+        self._reader.feed_data(
+            f">{command}\r\r\n*{key.upper()}={state[key].upper()}#\r\n".encode()
+        )
         return len(data)
 
 
