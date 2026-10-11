@@ -256,7 +256,7 @@ class BenQProjector(ABC):
         if self.has_prompt is None:
             self.has_prompt = await self._detect_prompt()
 
-        if self.has_prompt is False:
+        if self.has_prompt is False and not self._cr_framing:
             self._separator = b"#"
 
         power = None
@@ -547,8 +547,8 @@ class BenQProjector(ABC):
         <CR>*command#<CR>, as the BenQ RS232 specification prescribes.
         """
         if await self.get_config("wait_for_prompt") is False:
+            # Keep the newline separator, some responses (Unsupported item) don't end with #
             self.has_prompt = False
-            self._separator = b"#"
             self._cr_framing = True
 
     async def _detect_prompt(self) -> bool:
@@ -705,8 +705,13 @@ class BenQProjector(ABC):
         if self.has_prompt:
             await self._wait_for_prompt()
 
+        prefix = ""
+        if self._cr_framing:
+            # Drop late responses of previous commands, there's no prompt to sync on
+            await self.connection.reset()
+            prefix = "\r"
+
         logger.debug("command %s", command)
-        prefix = "\r" if self._cr_framing else ""
         await self.connection.write(f"{prefix}{command}\r".encode("ascii"))
 
     def _parse_response(self, command: BenQCommand, response, lowercase: bool = True):

@@ -13,6 +13,7 @@ import asyncio
 import unittest
 
 from benqprojector import BenQProjector
+from benqprojector.benqclasses import BenQCommand, BenQUnsupportedItemError
 from benqprojector.benqconnection import BenQConnection
 
 
@@ -57,11 +58,20 @@ class W5700Emulator(BenQConnection):
 
         command = data.strip(b"\r").decode()
         key, value = command[1:-1].split("=")
+        if key == "freeze":
+            # The real W5700 answers without * and #
+            self._reader.feed_data(f">{command}\r\r\nUnsupported item\r\n".encode())
+            return len(data)
         if key == "pow" and value != "?":
             self.power = value
         elif key == "sour" and value != "?":
             self.source = value
-        state = {"pow": self.power, "sour": self.source, "modelname": "W5700"}
+        state = {
+            "pow": self.power,
+            "sour": self.source,
+            "modelname": "W5700",
+            "macaddr": "00:00:00:00:00:00",
+        }
         self._reader.feed_data(f">{command}\r\r\n*{key.upper()}={state[key].upper()}#\r\n".encode())
         return len(data)
 
@@ -72,6 +82,11 @@ class Test(unittest.IsolatedAsyncioTestCase):
         projector.has_prompt = True  # As BenQProjectorSerial does
         self.assertTrue(await projector.connect())
         self.assertEqual(projector.POWERSTATUS_ON, projector.power_status)
+
+        # An unsupported item must not desynchronise the following commands
+        with self.assertRaises(BenQUnsupportedItemError):
+            await projector._send_command(BenQCommand("freeze"), check_supported=False)
+        self.assertEqual("on", await projector.send_command("pow"))
 
         self.assertTrue(await projector.select_video_source("hdmi2"))
         self.assertEqual("hdmi2", await projector.send_command("sour"))

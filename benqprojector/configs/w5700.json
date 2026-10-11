@@ -1,8 +1,10 @@
 {
 	"commands": [
 		"3d",
+		"amxdd",
 		"appmod",
 		"asp",
+		"ballastfwversion",
 		"bc",
 		"bgain",
 		"blank",
@@ -14,19 +16,22 @@
 		"directpower",
 		"down",
 		"enter",
-		"error",
-		"freeze",
-		"gamma",
+		"formatfwversion",
 		"gain",
+		"gamma",
 		"ggain",
 		"goffset",
 		"hdrbri",
 		"highaltitude",
 		"hue",
 		"lampm",
+		"lanfwversion",
 		"left",
 		"ltim",
+		"macaddr",
+		"mcufwversion",
 		"menu",
+		"menuposition",
 		"modelname",
 		"pow",
 		"pp",
@@ -34,29 +39,29 @@
 		"rgain",
 		"right",
 		"roffset",
-		"rstcurpicsetting",
 		"saturation",
+		"scalerfwversion",
 		"sharp",
 		"sour",
+		"sourmenu",
+		"standbynet",
+		"sysfwversion",
 		"tint",
-		"up"
+		"up",
+		"vkeystone"
 	],
 	"video_sources": [
 		"hdmi",
-		"hdmi2"
+		"hdmi2",
+		"usbreader"
 	],
 	"audio_sources": [],
 	"picture_modes": [
 		"bright",
 		"vivid",
 		"cine",
-		"d.cinema",
 		"user1",
-		"isfday",
-		"isfnight",
-		"threed",
-		"hdr10",
-		"hlg"
+		"dci-p3"
 	],
 	"color_temperatures": [
 		"warm",
@@ -67,8 +72,7 @@
 	"aspect_ratios": [
 		"4:3",
 		"16:9",
-		"auto",
-		"real"
+		"auto"
 	],
 	"projector_positions": [
 		"ft",
@@ -76,18 +80,24 @@
 		"rc",
 		"fc"
 	],
-	"menu_positions": [],
+	"menu_positions": [
+		"center",
+		"tl",
+		"tr",
+		"br",
+		"bl"
+	],
 	"lamp_modes": [
 		"lnor",
 		"eco",
 		"seco"
 	],
 	"3d_modes": [
+		"off",
 		"auto",
 		"tb",
 		"fp",
-		"sbs",
-		"iv"
+		"sbs"
 	],
 	"wait_for_prompt": false,
 	"poweron_time": 40,
